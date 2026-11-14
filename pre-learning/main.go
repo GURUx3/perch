@@ -118,19 +118,68 @@ func fib_with_count(count, a, b int) {
 	fib_with_count(count-1, b, a+b)
 }
 
+type TaskStatus string
+
+const (
+	Pending   TaskStatus = "pending"
+	Running   TaskStatus = "running"
+	Completed TaskStatus = "completed"
+	Failed    TaskStatus = "failed"
+)
+
+type Task struct {
+	ID       int
+	Name     string
+	status   string
+	Attempts int
+}
+
+func (t *Task) markCompleted() {
+
+	t.status = string(Completed)
+
+}
+
+func (t *Task) changeTaskName(newName string) {
+
+	t.Name = newName
+
+}
+
+func (t *Task) CanExecute() bool {
+
+	return t.status != "completed" && t.Attempts <= 3
+}
+
+func (t *Task) MarkPending() {
+
+	t.status = "pending"
+
+}
+
 func main() {
-	fmt.Println("Hello World")
 
-	res := fat(12)
-	fmt.Println(res)
+	task1 := Task{
+		ID:       1001,
+		Name:     "send welcome email",
+		status:   "pending",
+		Attempts: 0,
+	}
 
-	fato := factorial_go(5)
+	fmt.Println(task1)
 
-	fmt.Println(fato)
+	task2 := Task{
+		ID:       1001,
+		Name:     "send welcome email",
+		status:   "pending",
+		Attempts: 4,
+	}
 
-	fmt.Println(fib(10))
-	fib_with_count(5, 0, 1)
+	if task2.CanExecute() {
+		fmt.Println("You can Execute")
+	} else {
 
-	
-	
+		fmt.Println("Task Exected The Limit or task already Completed")
+	}
+
 }
